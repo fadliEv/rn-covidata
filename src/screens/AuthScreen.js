@@ -1,27 +1,60 @@
 // screens/AuthScreen.js
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, TextInput, Alert, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { users } from '../utils/authDummy';
+import * as WebBrowser from 'expo-web-browser';
+import * as Google from 'expo-auth-session/providers/google';
+import * as AuthSession from 'expo-auth-session';
+
+WebBrowser.maybeCompleteAuthSession();
 
 export default function AuthScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  // Fungsi untuk login menggunakan akun Google
-  const handleGoogleLogin = () => {
-    const dummyUser = users.find((user) => user.email === 'john.doe@gmail.com'); // Dummy login
-    if (dummyUser) {
-      Alert.alert('Login Sukses', `Welcome ${dummyUser.name}!`);
+  const redirectUri = AuthSession.makeRedirectUri({
+    useProxy: true,
+  });
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    expoClientId: '161935605768-ibs75nm4f07bfgp9hvvcb70e84t2nu03.apps.googleusercontent.com',
+    iosClientId: '161935605768-m3j57bodm8j4ln55c7begd2f0p2dgdh2.apps.googleusercontent.com',
+    redirectUri: redirectUri,
+    useProxy: true,
+  });  
+  
+
+  // Handle response dari Google Sign-In
+  useEffect(() => {
+      console.log('Redirect URI:', redirectUri);
+    if (response?.type === 'success') {
+      const { authentication } = response;
+
+      fetchUserInfo(authentication.accessToken);
+    }
+  }, [response]);
+
+  const fetchUserInfo = async (token) => {
+    try {
+      const res = await fetch('https://www.googleapis.com/userinfo/v2/me', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const user = await res.json();
+
+      Alert.alert('Login Sukses', `Selamat datang, ${user.name}`);
       navigation.navigate('Home');
-    } else {
-      Alert.alert('Gagal', 'Akun tidak ditemukan');
+    } catch (error) {
+      console.error('Error fetching Google user info:', error);
+      Alert.alert('Gagal', 'Tidak bisa mengambil data akun Google');
     }
   };
 
-  // Fungsi untuk login menggunakan email dan password
+  const handleGoogleLogin = () => {
+    promptAsync();
+  };
+
   const handleEmailLogin = () => {
     const dummyUser = users.find((user) => user.email === email && user.password === password);
     if (dummyUser) {
@@ -40,7 +73,6 @@ export default function AuthScreen({ navigation }) {
           source={require('../../assets/covid-logo.png')}
           style={styles.logo}
         />
-        {/* <Text style={styles.appTitle}>Covidata</Text> */}
       </View>
 
       {/* Deskripsi Pengantar */}
@@ -58,7 +90,6 @@ export default function AuthScreen({ navigation }) {
       {/* Form Login dengan Email dan Password */}
       <Text style={styles.orText}>Atau</Text>
 
-      {/* Label dan Input untuk Email */}
       <Text style={styles.label}>Email</Text>
       <TextInput
         style={styles.input}
@@ -67,7 +98,6 @@ export default function AuthScreen({ navigation }) {
         onChangeText={setEmail}
       />
 
-      {/* Label dan Input untuk Password */}
       <Text style={styles.label}>Password</Text>
       <TextInput
         style={styles.input}
@@ -83,10 +113,10 @@ export default function AuthScreen({ navigation }) {
 
       {/* Tombol Navigasi ke Halaman Registrasi */}
       <View style={styles.registerSection}>
-      <Text style={styles.orText}>Belum punya akun?</Text>
-      <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-        <Text style={styles.registerText}>Daftar</Text>
-      </TouchableOpacity>
+        <Text style={styles.orText}>Belum punya akun?</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+          <Text style={styles.registerText}>Daftar</Text>
+        </TouchableOpacity>
       </View>
 
       {/* Footer */}
@@ -100,10 +130,9 @@ export default function AuthScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    paddingTop : 60,
+    paddingTop: 60,
     backgroundColor: '#F5F9F8',
   },
   logoContainer: {
@@ -114,12 +143,6 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     resizeMode: 'contain',
-  },
-  appTitle: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#077A7D',
-    marginTop: 12,
   },
   description: {
     fontSize: 16,
@@ -178,18 +201,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   registerSection: {
+    alignSelf: 'center',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    alignSelf: 'center',
     marginTop: 16,
   },
   registerText: {
     color: '#077A7D',
     fontWeight: 'bold',
     fontSize: 14,
-    marginLeft : 6,
-    textDecorationLine : "underline"
+    marginLeft: 6,
+    textDecorationLine: 'underline',
   },
   footer: {
     position: 'absolute',
