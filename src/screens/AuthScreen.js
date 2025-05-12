@@ -44,7 +44,10 @@ export default function AuthScreen({ navigation }) {
       const user = await res.json();
 
       Alert.alert('Login Sukses', `Selamat datang, ${user.name}`);
-      navigation.navigate('Home');
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Map' }],
+      });
     } catch (error) {
       console.error('Error fetching Google user info:', error);
       Alert.alert('Gagal', 'Tidak bisa mengambil data akun Google');
@@ -59,7 +62,10 @@ export default function AuthScreen({ navigation }) {
     const dummyUser = users.find((user) => user.email === email && user.password === password);
     if (dummyUser) {
       Alert.alert('Login Sukses', `Welcome ${dummyUser.name}!`);
-      navigation.navigate('Home');
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Map' }],
+      });
     } else {
       Alert.alert('Gagal', 'Email atau password salah');
     }

@@ -5,6 +5,7 @@ import DetailScreen from '../screens/DetailScreen';
 import AddDataScreen from '../screens/AddDataScreen';
 import AuthScreen from '../screens/AuthScreen';
 import RegisterScreen from '../screens/RegisterScreen';
+import MapScreen from '../screens/MapScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +22,11 @@ export default function AppNavigator() {
           name="Register"
           component={RegisterScreen}
           options={{ title: 'Daftar Akun Baru',headerShown : false  }}
+        />
+        <Stack.Screen
+          name="Map"
+          component={MapScreen}
+          options={{ title: 'Peta COVID-19' }}
         />
         <Stack.Screen
           name="Home"
