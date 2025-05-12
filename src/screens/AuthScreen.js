@@ -39,7 +39,8 @@ export default function AuthScreen({ navigation }) {
         <Image
           source={require('../../assets/covid-logo.png')}
           style={styles.logo}
-        />        
+        />
+        {/* <Text style={styles.appTitle}>Covidata</Text> */}
       </View>
 
       {/* Deskripsi Pengantar */}
@@ -56,16 +57,21 @@ export default function AuthScreen({ navigation }) {
 
       {/* Form Login dengan Email dan Password */}
       <Text style={styles.orText}>Atau</Text>
-      
+
+      {/* Label dan Input untuk Email */}
+      <Text style={styles.label}>Email</Text>
       <TextInput
         style={styles.input}
-        placeholder="Email"
+        placeholder="Masukkan email"
         value={email}
         onChangeText={setEmail}
       />
+
+      {/* Label dan Input untuk Password */}
+      <Text style={styles.label}>Password</Text>
       <TextInput
         style={styles.input}
-        placeholder="Password"
+        placeholder="Masukkan password"
         secureTextEntry
         value={password}
         onChangeText={setPassword}
@@ -76,10 +82,12 @@ export default function AuthScreen({ navigation }) {
       </TouchableOpacity>
 
       {/* Tombol Navigasi ke Halaman Registrasi */}
+      <View style={styles.registerSection}>
       <Text style={styles.orText}>Belum punya akun?</Text>
       <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-        <Text style={styles.registerText}>Daftar Akun Baru</Text>
+        <Text style={styles.registerText}>Daftar</Text>
       </TouchableOpacity>
+      </View>
 
       {/* Footer */}
       <View style={styles.footer}>
@@ -95,7 +103,7 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    paddingTop : 80,
+    paddingTop : 60,
     backgroundColor: '#F5F9F8',
   },
   logoContainer: {
@@ -117,7 +125,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#555',
     textAlign: 'center',
-    marginBottom: 40,
+    marginBottom: 20,
   },
   descriptionHighlight: {
     fontWeight: 'bold',
@@ -129,7 +137,7 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 8,
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 16,
     width: '100%',
     justifyContent: 'center',
   },
@@ -142,7 +150,7 @@ const styles = StyleSheet.create({
   orText: {
     fontSize: 14,
     color: '#777',
-    marginVertical: 12,
+    marginVertical: 8,
   },
   input: {
     width: '100%',
@@ -153,6 +161,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 12,
   },
+  label: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#077A7D',
+    marginBottom: 6,
+    alignSelf: 'flex-start',
+  },
   loginButton: {
     backgroundColor: '#077A7D',
     paddingVertical: 12,
@@ -162,10 +177,19 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
   },
+  registerSection: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    marginTop: 16,
+  },
   registerText: {
     color: '#077A7D',
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 14,
+    marginLeft : 6,
+    textDecorationLine : "underline"
   },
   footer: {
     position: 'absolute',

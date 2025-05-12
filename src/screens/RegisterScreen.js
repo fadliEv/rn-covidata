@@ -44,21 +44,28 @@ export default function RegisterScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
+      {/* Deskripsi Pengantar */}
       <Text style={styles.title}>Daftar Akun Baru</Text>
+      <Text style={styles.description}>
+        Untuk melanjutkan, harap isi form berikut untuk membuat akun baru di aplikasi.
+      </Text>
 
+      {/* Form Input */}
+      <Text style={styles.label}>Nama Lengkap</Text>
       <TextInput
         style={styles.input}
         placeholder="Nama Lengkap"
         value={name}
         onChangeText={setName}
       />
+      <Text style={styles.label}>Email</Text>
       <TextInput
         style={styles.input}
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
       />
+      <Text style={styles.label}>Password</Text>
       <TextInput
         style={styles.input}
         placeholder="Password"
@@ -66,6 +73,7 @@ export default function RegisterScreen({ navigation }) {
         value={password}
         onChangeText={setPassword}
       />
+      <Text style={styles.label}>Konfirmasi Password</Text>
       <TextInput
         style={styles.input}
         placeholder="Konfirmasi Password"
@@ -74,14 +82,20 @@ export default function RegisterScreen({ navigation }) {
         onChangeText={setConfirmPassword}
       />
 
+      {/* Error Message */}
+      {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
+
+      {/* Tombol Registrasi */}
       <TouchableOpacity style={styles.registerButton} onPress={handleRegister}>
         <Text style={styles.buttonText}>Daftar</Text>
       </TouchableOpacity>
 
-      {/* Tombol Kembali ke Halaman Login */}
-      <TouchableOpacity onPress={() => navigation.goBack()}>
-        <Text style={styles.backText}>Sudah punya akun? Login di sini</Text>
-      </TouchableOpacity>
+        <View style={styles.loginSection}>
+            <Text style={styles.orText}>Sudah punya akun?</Text>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Text style={styles.loginText}>Login</Text>
+            </TouchableOpacity>
+        </View>
     </View>
   );
 }
@@ -99,6 +113,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#077A7D',
     marginBottom: 8,
+    textAlign: 'center',
+  },
+  description: {
+    fontSize: 15,
+    color: '#555',
+    textAlign: 'center',
+    marginBottom: 24,
+    paddingHorizontal: 40,
   },
   input: {
     width: '100%',
@@ -115,6 +137,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 40,
     borderRadius: 8,
     marginTop: 16,
+    width: '100%',
+    alignItems: 'center',
   },
   buttonText: {
     color: '#fff',
@@ -132,5 +156,31 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
     marginTop: 16,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#077A7D',
+    marginBottom: 6,
+    alignSelf: 'flex-start',
+  },
+  loginText: {
+    color: '#077A7D',
+    fontWeight: 'bold',
+    fontSize: 14,
+    marginLeft : 6,
+    textDecorationLine : "underline"
+  },
+  loginSection : {
+    alignSelf: 'flex-center',
+    flexDirection : "row", 
+    justifyContent : "center", 
+    alignItems : "center",
+    marginTop : 16,
+  },
+  orText: {
+    fontSize: 14,
+    color: '#777',
+    marginVertical: 8,
   },
 });
